@@ -1,0 +1,101 @@
+﻿@* ci-dessous le modyle est facultatif. si on le met pas il est de type dynamic. permet de lié la page razor avec untype de model. le model qui lui sera envoyé depuis un constructeur sera de ce type (de base le type de Model est dynamic.*@
+@* @model Marmoset
+@model List<string>
+ *@
+@{
+    ViewData["Title"] = "Contact";
+    // Layout = "_CustomLayout";
+}
+
+@{
+    string message = "Liste des contacts";
+    List<string> contacts = (List<string>)ViewData["Contacts"]!;
+    bool test = contacts.Count != 0;
+    int index = 1;
+}
+
+<div>
+    <h2>Méthode 1 pour récupérer la liste de contact (ViewData["Contacts"]) :</h2>
+    @if (test) {
+        <ol>
+            @foreach (string contact in (List<string>)ViewData["Contacts"]!)
+            {
+               <li>@contact</li> 
+            }
+        </ol>
+    }
+    else
+    {
+        <p>Pas de liste</p>
+    }
+</div>
+
+<div>
+    <h2>Méthode 2 pour récupérer la liste de contact (ViewBag.LesContacts) :</h2>
+    @if (test)
+    {
+        <ol>
+            @foreach (string contact in (List<string>)ViewBag.LesContacts!)
+            {
+                <li>@contact</li>
+            }
+        </ol>
+    }
+    else
+    {
+        <p>Pas de liste</p>
+    }
+</div>
+
+@* le view est lié à l'entité (model) appelé tout en haut du fichier. *@
+<div>
+<h2>Méthode 3 pour récupérer le modèle (décommenter l53 'Index.cshtml' dans le dossier contact, décommenter l35 & commenter l38 dans 'ContactController') :</h2>
+        @* <p>@Model.Id - @Model.Name a @Model.Age ans</p> *@
+</div>
+
+<div>
+<h2>Méthode 4 pour récupérer la liste de contact (contacts) :</h2>
+<ol>
+    @foreach (string contact in @Model)
+    {
+        <li>@contact</li>
+    }
+</ol>
+</div>
+
+
+<div class="text-center">
+    @*Html Helpers*@
+    @Html.ActionLink("Retour vers l'accueil", "Index", "Home")
+
+    @*Tag Helpers*@
+    <a asp-action="Privacy" asp-controller="Home" class="btn">Privacy</a>
+
+    <h1 class="display-4">@ViewData["Title"]</h1>
+    <h2>@message</h2>
+    <div>
+        @if (test) {
+
+            <ol>
+                @foreach (var contact in contacts)
+                {
+                    <a asp-action="Details" asp-route-id="@index" asp-controller="Contact" class="btn"><li>@contact</li></a>
+                    index++;
+                }
+            </ol>
+        }
+        else
+        {
+            <p>Pas de contacts pour le moment !</p>
+        }
+    </div>
+
+    <!-- Un commentaire visible dans le code source côté client --> 
+    @* Un commentaire cshtml/Razor, visible que dans ce fichier cshtml *@
+
+
+    @*Tag Helpers*@
+    <p><a asp-action="Add" class="btn">Ajouter un contact</a></p>
+    @*Tag Helpers*@
+    <p><a asp-action="Delete" class="btn">Supprimer un contact</a></p>
+</div>
